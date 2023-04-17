@@ -5,6 +5,13 @@
 using namespace std;
 using namespace ariel;
 
+int Fraction::getNumerator(){
+    return this->_numerator;
+}
+int Fraction::getDenominator(){
+    return this->_denominator;
+}
+
 Fraction Fraction::reducedForm(){
     if(this->_denominator!=0) {
         if (this->_numerator == 0)

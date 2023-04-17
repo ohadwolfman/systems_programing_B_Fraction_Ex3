@@ -13,6 +13,9 @@ namespace ariel{
         _numerator(numerator),
         _denominator(denominator) {}
 
+        int getNumerator();
+        int getDenominator();
+
         Fraction reducedForm();
         Fraction operator+(const Fraction& other) const;
         Fraction operator-(const Fraction& other) const;
