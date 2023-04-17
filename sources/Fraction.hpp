@@ -17,6 +17,7 @@ namespace ariel{
         Fraction operator+(const Fraction& other) const;
         Fraction operator-(const Fraction& other) const;
         Fraction operator*(const Fraction& other) const;
+        Fraction operator*(const double other);
         Fraction operator/(const Fraction& other) const;
         bool operator==(const Fraction& other) const;
         bool operator<(const Fraction& other) const;
@@ -27,8 +28,8 @@ namespace ariel{
         Fraction operator++(int dummy_flag_for_postfix_increment); //postfix n++
         Fraction& operator--(); //prefix: --n
         Fraction operator--(int dummy_flag_for_postfix_increment); //postfix n--
-        ostream& operator<<(ostream& os, const Fraction& f);
-        ostream& operator>>(ostream& os, const Fraction& f);
+        friend ostream& operator<<(ostream& os, const Fraction& f);
+        friend istream& operator>>(istream& is, Fraction& f);
 
 
 
