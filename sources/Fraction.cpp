@@ -5,43 +5,55 @@
 using namespace std;
 using namespace ariel;
 
-int Fraction::getNumerator(){
+Fraction::Fraction (const int& numerator= 0, const int& denominator= 1):
+        _numerator(numerator),
+        _denominator(denominator) {
+    if(denominator == 0) {
+        throw invalid_argument("You cant select 0 as denominator")
+    }
+    if (numerator > INT_MAX || denominator > INT_MAX) {
+        throw overflow_error("Too large number");
+    }
+    if (denominator < 0) {
+        _numerator = -1 * numerator;
+        _denominator = abs(denominator);
+    }
+    reducedForm();
+}
+
+int Fraction::getNumerator() const{
     return this->_numerator;
 }
-int Fraction::getDenominator(){
+int Fraction::getDenominator() const{
     return this->_denominator;
 }
 
-Fraction Fraction::reducedForm(){
-    if(this->_denominator!=0) {
-        if (this->_numerator == 0)
-            return Fraction(0, 1);
-        else if (this->_numerator < this->_denominator)
-            return *this;
-        else if (this->_numerator == this->_denominator)
-            return Fraction(1, 1);
-        else {
-            double answer = this->_numerator/this->_denominator;
-            this->_numerator = this->_numerator-(answer*_denominator);
-            return answer + (this->_numerator/this->_numerator);
-        }
-    }
-    else{
-        throw "error";
-    }
+int gcd(int a, int b) {
+    if (b == 0)
+        return a;
+    return gcd(b, a % b);
+}
+
+void Fraction::reducedForm(){
+    int GCD = gcd(this->_numerator, this->_denominator);
+    this->_numerator = this->_numerator / GCD;
+    this->_denominator = this->_denominator / GCD;
 }
 
 Fraction Fraction::operator+(const Fraction& other) const {
-    Fraction f = Fraction((this->_numerator*other._denominator) + (this->_denominator*other._numerator), this->_denominator*other._denominator);
+    Fraction f = Fraction((this->_numerator*other._denominator) + (this->_denominator*other._numerator),
+                          this->_denominator*other._denominator);
     return f.reducedForm();
 }
 Fraction Fraction::operator-(const Fraction& other) const{
-    return Fraction(1,1);
+    int nn = _numerator * other._denominator - _denominator * other._numerator;
+    int dd = _denominator * other._denominator;
+    return Fraction(nn, dd).reducedForm();
 }
 Fraction Fraction::operator*(const Fraction& other) const{
     return Fraction(1,1);
 }
-Fraction Fraction::operator*(const double other) const{
+Fraction Fraction::operator*(const float other) const{
     return Fraction(1,1);
 }
 Fraction Fraction::operator/(const Fraction& other) const{
@@ -90,8 +102,15 @@ friend istream& operator>>(istream& is, Fraction& f) {
     if (denominator == 0) {
         throw std::invalid_argument("Denominator cannot be zero");
     }
-
     f = Fraction(numerator, denominator);
-
     return is;
+}
+
+operator float() const {              // conversion operator
+    cout << "converting Fraction to float" << endl;
+    return float(numerator) / float(denominator);
+}
+
+operator string() const {              // conversion operator
+    return to_string(numerator)+"/"+to_string(denominator);
 }

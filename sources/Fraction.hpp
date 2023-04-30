@@ -1,6 +1,7 @@
 #ifndef FRACTION_HPP
 #define FRACTION_HPP
 #include <iostream>
+#include <stdlib.h>
 
 using namespace std;
 namespace ariel{
@@ -9,33 +10,76 @@ namespace ariel{
         int _denominator;
 
     public:
-        Fraction (const int& numerator= 0, const int& denominator= 1):
-        _numerator(numerator),
-        _denominator(denominator) {}
+        // Constructor
+        Fraction (const int& numerator= 0, const int& denominator= 1);
+        // Copy constructor
+        Fraction (const Fraction& copy) :
+        _numerator(copy._numerator),
+        _denominator(copy._denominator) {}
 
-        int getNumerator();
-        int getDenominator();
+        int getNumerator() const;
+        int getDenominator() const;
+        int gcd(int a, int b);
+        void reducedForm();
 
-        Fraction reducedForm();
+        // Arithmetic Operators
+        // Operator +
         Fraction operator+(const Fraction& other) const;
+        Fraction operator+(const float& num) const;
+
+        // Operator -
         Fraction operator-(const Fraction& other) const;
+        Fraction operator-(const float& num) const;
+
+        // Operator *
         Fraction operator*(const Fraction& other) const;
-        Fraction operator*(const double other);
+        Fraction operator*(const float& other);
+
+        // Operator /
         Fraction operator/(const Fraction& other) const;
+        Fraction operator/(const float& other);
+
+        // prefix: ++n
+        Fraction& operator++();
+        //postfix n++
+        Fraction operator++(int dummy_flag_for_postfix_increment);
+
+        //prefix: --n
+        Fraction& operator--();
+        //postfix n--
+        Fraction operator--(int dummy_flag_for_postfix_increment);
+
+
+        // Comparison Operators
+        // Operator ==
         bool operator==(const Fraction& other) const;
+        bool operator==(const float& other);
+
+        // Operator <
         bool operator<(const Fraction& other) const;
+        bool operator<(const float& other);
+
+        // Operator >
         bool operator>(const Fraction& other) const;
+        bool operator>(const float& other);
+
+        // Operator <=
         bool operator<=(const Fraction& other) const;
+        bool operator<=(const float& other);
+
+        // Operator >=
         bool operator>=(const Fraction& other) const;
-        Fraction& operator++(); //prefix: ++n
-        Fraction operator++(int dummy_flag_for_postfix_increment); //postfix n++
-        Fraction& operator--(); //prefix: --n
-        Fraction operator--(int dummy_flag_for_postfix_increment); //postfix n--
+        bool operator>=(const float& other);
+
+        // ioStream Operators
+        // Operator <<
         friend ostream& operator<<(ostream& os, const Fraction& f);
+        // Operator >>
         friend istream& operator>>(istream& is, Fraction& f);
 
-
-
+        // Conversion Operators
+        operator float() const;
+        operator string() const;
     };
 }
 #endif
