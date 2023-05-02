@@ -11,11 +11,11 @@ using namespace ariel;
 
 Fraction::Fraction (const int& numerator= 0, const int& denominator= 1):
         _numerator(numerator),
-        _denominator(denominator) {
+        _denominator(denominator){
     if(denominator == 0) {
         throw invalid_argument("You cant select 0 as denominator")
     }
-    if (numerator > INT_MAX || denominator > INT_MAX) {
+    if (_numerator > INT_MAX || _denominator > INT_MAX) {
         throw overflow_error("Too large number");
     }
     if (denominator < 0) {
@@ -52,8 +52,8 @@ Fraction Fraction::operator+(const Fraction& other) {
     f.reducedForm();
     return f;
 }
-Fraction Fraction::operator+(float& num) const{}
-Fraction Fraction::operator+(float num, const Fraction& f){}
+Fraction Fraction::operator+(float& num) const{return Fraction(1,1);}
+Fraction Fraction::operator+(float num, const Fraction& f){return Fraction(1,1);}
 
 // Operator -
 Fraction Fraction::operator-(const Fraction& other) const{
@@ -61,8 +61,8 @@ Fraction Fraction::operator-(const Fraction& other) const{
     int dd = _denominator * other._denominator;
     return Fraction(nn, dd).reducedForm();
 }
-Fraction Fraction::operator-(float& num) const{}
-Fraction Fraction::operator-(float num, const Fraction& f){}
+Fraction Fraction::operator-(float& num) const{return Fraction(1,1);}
+Fraction Fraction::operator-(float num, const Fraction& f){return Fraction(1,1);}
 
 // Operator *
 Fraction Fraction::operator*(const Fraction& other) const{
@@ -75,7 +75,7 @@ Fraction Fraction::operator*(const float other) const
     int numerator = _numerator * other;
     return Fraction(numerator, _denominator);
 }
-Fraction Fraction::operator*(float num, const Fraction& f){}
+Fraction Fraction::operator*(float num, const Fraction& f){return Fraction(1,1);}
 
 // Operator /
 Fraction Fraction::operator/(const Fraction& other) const{
@@ -88,7 +88,7 @@ Fraction Fraction::operator/(const float other) const
     int numerator = _numerator * other;
     return Fraction(numerator, _denominator);
 }
-Fraction Fraction::operator/(float num, const Fraction& f){}
+Fraction Fraction::operator/(float num, const Fraction& f){ return Fraction(1,1);}
 
 
 // prefix: ++n
@@ -112,7 +112,6 @@ Fraction& Fraction::operator--(){
 //postfix n--
 Fraction Fraction::operator--(int postfix){
     return Fraction(1,1);
-
 }
 
 
@@ -121,8 +120,8 @@ Fraction Fraction::operator--(int postfix){
 bool Fraction::operator==(const Fraction& other) const{
     return (_numerator == other._numerator) && (_denominator == other._denominator);
 }
-bool Fraction::operator==(const float& other){}
-bool Fraction::operator==(const float num, const Fraction& f){}
+bool Fraction::operator==(const float other){return true;}
+bool Fraction::operator==(const float num, const Fraction& f){return true;}
 
 // Operator <
 bool Fraction::operator<(const Fraction& other) const{
@@ -130,8 +129,8 @@ bool Fraction::operator<(const Fraction& other) const{
     int other_numerator = other._numerator * _denominator;
     return numerator < other_numerator;
 }
-bool Fraction::operator<(const float& other){}
-bool Fraction::operator<(const float num, const Fraction& f){}
+bool Fraction::operator<(const float other){return true;}
+bool Fraction::operator<(const float num, const Fraction& f){return true;}
 
 // Operator >
 bool Fraction::operator>(const Fraction& other) const{
@@ -139,8 +138,8 @@ bool Fraction::operator>(const Fraction& other) const{
     int other_numerator = other._numerator * _denominator;
     return numerator > other_numerator;
 }
-bool Fraction::operator>(const float& other){}
-bool Fraction::operator>(const float num, const Fraction& f){}
+bool Fraction::operator>(const float other){return true;}
+bool Fraction::operator>(const float num, const Fraction& f){return true;}
 
 // Operator <=
 bool Fraction::operator<=(const Fraction& other) const{
@@ -148,8 +147,8 @@ bool Fraction::operator<=(const Fraction& other) const{
     int other_numerator = other._numerator * _denominator;
     return numerator >= other_numerator;
 }
-bool Fraction::operator<=(const float& other){}
-bool Fraction::operator<=(const float num, const Fraction& f){}
+bool Fraction::operator<=(const float other){return true;}
+bool Fraction::operator<=(const float num, const Fraction& f){return true;}
 
 // Operator >=
 bool Fraction::operator>=(const Fraction& other) const{
@@ -157,8 +156,8 @@ bool Fraction::operator>=(const Fraction& other) const{
     int other_numerator = other._numerator * _denominator;
     return numerator >= other_numerator;
 }
-bool Fraction::operator>=(const float& other){}
-bool Fraction::operator>=(const float num, const Fraction& f){}
+bool Fraction::operator>=(const float& other){return true;}
+bool Fraction::operator>=(const float num, const Fraction& f){return true;}
 
 
 // ioStream Operators
@@ -171,21 +170,18 @@ ostream& Fraction::operator<<(ostream& os, const Fraction& f){
 istream& Fraction::operator>>(istream& is, Fraction& f) {
     int numerator, denominator;
     char slash;
-
     is >> numerator >> slash >> denominator;
-
     // Check for invalid input
     if (denominator == 0) {
         throw std::invalid_argument("Denominator cannot be zero");
     }
-
     // Create a new Fraction object with the input values
     f = Fraction(numerator, denominator);
     return is;
 }
 
 // Conversion operator to convert a float to Fraction object
-Fraction Fraction::operator Fraction(float f) const {
+Fraction::operator Fraction(float f) const {
     int den = 1000; // maximum of 3 digits after the decimal point
     int num = round(f * den);
     int gcd_val = gcd(num, den);
@@ -194,12 +190,12 @@ Fraction Fraction::operator Fraction(float f) const {
     return Fraction(num, den);
 }
 // Conversion operator to convert a Fraction object to float
-float Fraction::operator float() const {
+Fraction::operator float() const {
     return float(_numerator) / float(_denominator);
 }
 
 // Conversion operator to convert a Fraction object to a string
-string Fraction::operator string() const {
+Fraction::operator string() const {
     std::ostringstream output;
     output << _numerator << "/" << _denominator;
     return output.str();

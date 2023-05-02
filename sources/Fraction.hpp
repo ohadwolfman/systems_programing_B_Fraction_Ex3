@@ -96,9 +96,9 @@ namespace ariel{
         friend istream& operator>>(istream& is, Fraction& f);
 
         // Conversion Operators
-        Fraction operator Fraction(float f) const
-        float operator float() const;
-        string operator string() const;
+        operator Fraction() const;
+        operator float() const;
+        operator string() const;
     };
 }
 #endif
