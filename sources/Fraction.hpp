@@ -10,12 +10,15 @@ namespace ariel{
         int _denominator;
 
     public:
+        Fraction(): _numerator(0), _denominator(1){}
         // Constructor
-        Fraction (const int& numerator= 0, const int& denominator= 1);
+        Fraction (const int numerator, const int denominator);
         // Copy constructor
         Fraction (const Fraction& copy) :
         _numerator(copy._numerator),
         _denominator(copy._denominator) {}
+        Fraction (float f) : _numerator((int) f*1000), _denominator(1000) {}
+
 
         int getNumerator() const;
         int getDenominator() const;
@@ -25,25 +28,25 @@ namespace ariel{
 
         // Arithmetic Operators
         // Operator +
-        Fraction operator+(const Fraction& other) const;
-        Fraction operator+(float& num) const;
+        Fraction operator+(const Fraction& other);
+        Fraction operator+(float num);
         friend Fraction operator+(const float num, const Fraction& f);
 
         // Operator -
-        Fraction operator-(const Fraction& other) const;
-        Fraction operator-(const float& num) const;
+        Fraction operator-(const Fraction& other);
+        Fraction operator-(const float num);
         friend Fraction operator-(const float num, const Fraction& f);
 
 
         // Operator *
-        Fraction operator*(const Fraction& other) const;
-        Fraction operator*(const float& other);
+        Fraction operator*(const Fraction& other);
+        Fraction operator*(const float other);
         friend Fraction operator*(const float num, const Fraction& f);
 
 
         // Operator /
-        Fraction operator/(const Fraction& other) const;
-        Fraction operator/(const float& other);
+        Fraction operator/(const Fraction& other);
+        Fraction operator/(const float other);
         friend Fraction operator/(const float num, const Fraction& f);
 
 
@@ -60,32 +63,32 @@ namespace ariel{
 
         // Comparison Operators
         // Operator ==
-        bool operator==(const Fraction& other) const;
-        bool operator==(const float& other);
+        bool operator==(const Fraction& other);
+        bool operator==(const float other);
         friend bool operator==(const float num, const Fraction& f);
 
 
         // Operator <
-        bool operator<(const Fraction& other) const;
-        bool operator<(const float& other);
+        bool operator<(const Fraction& other);
+        bool operator<(const float other);
         friend bool operator<(const float num, const Fraction& f);
 
 
         // Operator >
-        bool operator>(const Fraction& other) const;
-        bool operator>(const float& other);
+        bool operator>(const Fraction& other);
+        bool operator>(const float other);
         friend bool operator>(const float num, const Fraction& f);
 
 
         // Operator <=
-        bool operator<=(const Fraction& other) const;
-        bool operator<=(const float& other);
+        bool operator<=(const Fraction& other);
+        bool operator<=(const float other);
         friend bool operator<=(const float num, const Fraction& f);
 
 
         // Operator >=
-        bool operator>=(const Fraction& other) const;
-        bool operator>=(const float& other);
+        bool operator>=(const Fraction& other);
+        bool operator>=(const float other);
         friend bool operator>=(const float num, const Fraction& f);
 
 
@@ -95,10 +98,10 @@ namespace ariel{
         // Operator >>
         friend istream& operator>>(istream& is, Fraction& f);
 
-        // Conversion Operators
-        operator Fraction() const;
-        operator float() const;
-        operator string() const;
+//        // Conversion Operators
+//        operator Fraction() const;
+//        operator float() const;
+//        operator string() const;
     };
 }
 #endif
