@@ -96,7 +96,7 @@ namespace ariel{
         // Operator <<
         friend ostream& operator<<(ostream& os, const Fraction& f);
         // Operator >>
-        friend istream& operator>>(istream& is, Fraction& f);
+        friend istream& operator>>(istream& ist, Fraction& frac);
 
 //        // Conversion Operators
 //        operator Fraction() const;

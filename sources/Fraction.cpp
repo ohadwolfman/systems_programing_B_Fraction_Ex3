@@ -174,20 +174,21 @@ bool operator>=(const float num, const Fraction& f){return true;}
 
 // ioStream Operators
 // Operator <<
-ostream& Fraction::operator<<(ostream& os, const Fraction& f){
-    os << f._numerator << '/' << f._denominator;
+ostream& operator<<(ostream& os, const Fraction& f){
+    os << f.getNumerator() <<'/' << f.getDenominator();
     return os;
 }
+
 // Operator >>
-istream& Fraction::operator>>(istream& is, Fraction& f) {
+istream& operator>>(istream& is, Fraction& f) {
     int numerator, denominator;
     char slash;
+
     is >> numerator >> slash >> denominator;
-    // Check for invalid input
+
     if (denominator == 0) {
         throw std::invalid_argument("Denominator cannot be zero");
     }
-    // Create a new Fraction object with the input values
     f = Fraction(numerator, denominator);
     return is;
 }
