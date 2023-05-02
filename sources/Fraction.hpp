@@ -2,8 +2,8 @@
 #define FRACTION_HPP
 #include <iostream>
 #include <stdlib.h>
-
 using namespace std;
+
 namespace ariel{
     class Fraction{
         int _numerator;
@@ -20,56 +20,74 @@ namespace ariel{
         int getNumerator() const;
         int getDenominator() const;
         int gcd(int a, int b);
-        void reducedForm();
+        Fraction reducedForm();
+
 
         // Arithmetic Operators
         // Operator +
         Fraction operator+(const Fraction& other) const;
-        Fraction operator+(const float& num) const;
+        Fraction operator+(float& num) const;
+        friend Fraction operator+(const float num, const Fraction& f);
 
         // Operator -
         Fraction operator-(const Fraction& other) const;
         Fraction operator-(const float& num) const;
+        friend Fraction operator-(const float num, const Fraction& f);
+
 
         // Operator *
         Fraction operator*(const Fraction& other) const;
         Fraction operator*(const float& other);
+        friend Fraction operator*(const float num, const Fraction& f);
+
 
         // Operator /
         Fraction operator/(const Fraction& other) const;
         Fraction operator/(const float& other);
+        friend Fraction operator/(const float num, const Fraction& f);
+
 
         // prefix: ++n
         Fraction& operator++();
         //postfix n++
-        Fraction operator++(int dummy_flag_for_postfix_increment);
+        Fraction operator++(int postfix);
 
         //prefix: --n
         Fraction& operator--();
         //postfix n--
-        Fraction operator--(int dummy_flag_for_postfix_increment);
+        Fraction operator--(int postfix);
 
 
         // Comparison Operators
         // Operator ==
         bool operator==(const Fraction& other) const;
         bool operator==(const float& other);
+        friend bool operator==(const float num, const Fraction& f);
+
 
         // Operator <
         bool operator<(const Fraction& other) const;
         bool operator<(const float& other);
+        friend bool operator<(const float num, const Fraction& f);
+
 
         // Operator >
         bool operator>(const Fraction& other) const;
         bool operator>(const float& other);
+        friend bool operator>(const float num, const Fraction& f);
+
 
         // Operator <=
         bool operator<=(const Fraction& other) const;
         bool operator<=(const float& other);
+        friend bool operator<=(const float num, const Fraction& f);
+
 
         // Operator >=
         bool operator>=(const Fraction& other) const;
         bool operator>=(const float& other);
+        friend bool operator>=(const float num, const Fraction& f);
+
 
         // ioStream Operators
         // Operator <<
@@ -78,8 +96,9 @@ namespace ariel{
         friend istream& operator>>(istream& is, Fraction& f);
 
         // Conversion Operators
-        operator float() const;
-        operator string() const;
+        Fraction operator Fraction(float f) const
+        float operator float() const;
+        string operator string() const;
     };
 }
 #endif
