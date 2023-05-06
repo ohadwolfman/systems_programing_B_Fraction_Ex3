@@ -12,37 +12,37 @@ namespace ariel{
     public:
         // Constructors
         Fraction(): _numerator(0), _denominator(1){}
-        Fraction (const int numerator, const int denominator);
+        Fraction (int numerator, int denominator);
         Fraction(float num);
 
         int getNumerator() const;
         int getDenominator() const;
-        int gcd(int a, int b);
+        int gcd(int first, int second);
         Fraction reducedForm();
 
 
         // Arithmetic Operators
         // Operator +
         Fraction operator+(const Fraction& other);
-        Fraction operator+(float num);
-        friend Fraction operator+(float num, const Fraction& f);
+        Fraction operator+(float& num);
+        friend Fraction operator+(float& num, const Fraction& frac);
 
         // Operator -
         Fraction operator-(const Fraction& other);
-        Fraction operator-(const float num);
-        friend Fraction operator-(const float num, const Fraction& f);
+        Fraction operator-(const float& num);
+        friend Fraction operator-(const float& num, const Fraction& frac);
 
 
         // Operator *
         Fraction operator*(const Fraction& other);
-        Fraction operator*(const float other);
-        friend Fraction operator*(const float num, const Fraction& f);
+        Fraction operator*(const float& other);
+        friend Fraction operator*(const float& num, const Fraction& frac);
 
 
         // Operator /
         Fraction operator/(const Fraction& other);
-        Fraction operator/(const float other);
-        friend Fraction operator/(const float num, const Fraction& f);
+        Fraction operator/(const float& other);
+        friend Fraction operator/(const float& num, const Fraction& frac);
 
 
         // prefix: ++n
@@ -59,32 +59,32 @@ namespace ariel{
         // Comparison Operators
         // Operator ==
         bool operator==(const Fraction& frac) const;
-        bool operator==(const float other) const;
-        friend bool operator==(const float num, const Fraction& f);
+        bool operator==(const float& other) const;
+        friend bool operator==(const float& num, const Fraction& frac);
 
 
         // Operator <
-        bool operator<(const Fraction& other);
-        bool operator<(const float other);
-        friend bool operator<(const float num, const Fraction& f);
+        bool operator<(const Fraction& frac) const;
+        bool operator<(const float& num) const;
+        friend bool operator<(const float& num, const Fraction& frac);
 
 
         // Operator >
-        bool operator>(const Fraction& other);
-        bool operator>(const float other);
-        friend bool operator>(const float num, const Fraction& f);
+        bool operator>(const Fraction& frac) const;
+        bool operator>(const float& num) const;
+        friend bool operator>(const float& num, const Fraction& frac);
 
 
         // Operator <=
-        bool operator<=(const Fraction& other);
-        bool operator<=(const float other);
-        friend bool operator<=(const float num, const Fraction& f);
+        bool operator<=(const Fraction& frac) const;
+        bool operator<=(const float& num) const;
+        friend bool operator<=(const float& num, const Fraction& frac);
 
 
         // Operator >=
-        bool operator>=(const Fraction& other);
-        bool operator>=(const float other);
-        friend bool operator>=(const float num, const Fraction& f);
+        bool operator>=(const Fraction& frac) const;
+        bool operator>=(const float& num) const;
+        friend bool operator>=(const float& num, const Fraction& frac);
 
 
         // ioStream Operators
@@ -94,7 +94,6 @@ namespace ariel{
         friend istream& operator>>(istream& ist, Fraction& frac);
 
 //        // Conversion Operators
-//        operator Fraction() const;
 //        operator float() const;
 //        operator string() const;
     };

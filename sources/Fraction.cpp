@@ -7,7 +7,7 @@
 using namespace std;
 namespace ariel {
 
-    Fraction::Fraction(const int numerator, const int denominator) {
+    Fraction::Fraction(int numerator, int denominator) {
         if (denominator == 0) {
             throw invalid_argument("You cant select 0 as denominator");
         }
@@ -62,13 +62,13 @@ namespace ariel {
         return f;
     }
 
-    Fraction Fraction::operator+(float num) {
+    Fraction Fraction::operator+(float& num) {
         Fraction temp = Fraction(int(num*1000),1000);
         temp = temp + *this;
         return temp.reducedForm();
     }
 
-    Fraction operator+(float num, const Fraction &frac) {
+    Fraction operator+(float& num, const Fraction &frac) {
         Fraction temp = Fraction(int(num*1000),1000);
         return (temp + frac).reducedForm();
 
@@ -81,13 +81,13 @@ namespace ariel {
         return Fraction(nn, dd).reducedForm();
     }
 
-    Fraction Fraction::operator-(float num) {
+    Fraction Fraction::operator-(float& num) {
         Fraction temp = Fraction(int(num*1000),1000);
         temp = (*this) - temp;
         return temp.reducedForm();
     }
 
-    Fraction operator-(float num, const Fraction &frac) {
+    Fraction operator-(float& num, const Fraction &frac) {
         Fraction temp = Fraction(int(num*1000),1000);
         return (temp - frac).reducedForm();
     }
@@ -99,13 +99,13 @@ namespace ariel {
         return Fraction(numerator, denominator);
     }
 
-    Fraction Fraction::operator*(const float other) {
+    Fraction Fraction::operator*(const float& other) {
         Fraction temp = Fraction(int(other*1000),1000);
         temp = temp * (*this);
         return temp.reducedForm();
     }
 
-    Fraction operator*(float num, const Fraction &f) {
+    Fraction operator*(float& num, const Fraction &f) {
         Fraction temp = Fraction(int(num*1000),1000);
         temp = temp * f;
         return temp.reducedForm();
@@ -118,13 +118,13 @@ namespace ariel {
         return Fraction(numerator, denominator);
     }
 
-    Fraction Fraction::operator/(const float num) {
+    Fraction Fraction::operator/(const float& num) {
         Fraction temp = Fraction(int(num*1000),1000);
         temp = *this/ temp;
         return temp.reducedForm();
     }
 
-    Fraction operator/(float num, const Fraction &frac) {
+    Fraction operator/(float& num, const Fraction &frac) {
         Fraction temp = Fraction(int(num*1000),1000);
         return (temp / frac).reducedForm();
     }
@@ -159,62 +159,88 @@ namespace ariel {
 // Comparison Operators
 // Operator ==
     bool Fraction::operator==(const Fraction &frac) const{
-        return (_numerator == frac._numerator) && (_denominator == frac._denominator);
+        int left = _numerator * frac._denominator;
+        int right = _denominator * frac._numerator;
+        return left == right;
     }
 
-    bool Fraction::operator==(const float num) const {
+    bool Fraction::operator==(const float& num) const {
         Fraction n = Fraction(num);
         return (this->_numerator== n._numerator) && (this->_denominator == n._denominator);
     }
 
-    bool operator==(const float num, const Fraction &frac) {
+    bool operator==(const float& num, const Fraction &frac) {
         Fraction temp =Fraction(num);
         return (temp==frac);
     }
 
 // Operator <
-    bool Fraction::operator<(const Fraction &other) {
-        int numerator = _numerator * other._denominator;
-        int other_numerator = other._numerator * _denominator;
-        return numerator < other_numerator;
+    bool Fraction::operator<(const Fraction &frac) const{
+        int left = _numerator * frac._denominator;
+        int right = _denominator * frac._numerator;
+        return left < right;
     }
 
-    bool Fraction::operator<(const float other) { return true; }
+    bool Fraction::operator<(const float& num) const{
+        float n = (this->_numerator) / (this->_denominator);
+        return n > num;
+    }
 
-    bool operator<(const float num, const Fraction &f) { return true; }
+    bool operator<(const float& num, const Fraction &frac){
+        Fraction temp =Fraction(num);
+        return (temp < frac);
+    }
 
 // Operator >
-    bool Fraction::operator>(const Fraction &other) {
-        int numerator = _numerator * other._denominator;
-        int other_numerator = other._numerator * _denominator;
-        return numerator > other_numerator;
+    bool Fraction::operator>(const Fraction &frac) const {
+        int left = _numerator * frac._denominator;
+        int right = _denominator * frac._numerator;
+        return left > right;
     }
 
-    bool Fraction::operator>(const float other) { return true; }
+    bool Fraction::operator>(const float& num) const{
+        float n = (this->_numerator) / (this->_denominator);
+        return n > num;
+    }
 
-    bool operator>(const float num, const Fraction &f) { return true; }
+    bool operator>(const float& num, const Fraction& frac){
+        Fraction temp =Fraction(num);
+        return (temp > frac);
+    }
 
 // Operator <=
-    bool Fraction::operator<=(const Fraction &other) {
-        int numerator = _numerator * other._denominator;
-        int other_numerator = other._numerator * _denominator;
-        return numerator >= other_numerator;
+    bool Fraction::operator<=(const Fraction &frac) const{
+        int left = _numerator * frac._denominator;
+        int right = _denominator * frac._numerator;
+        return left <= right;
     }
 
-    bool Fraction::operator<=(const float other) { return true; }
+    bool Fraction::operator<=(const float& num) const{
+        float n = (this->_numerator) / (this->_denominator);
+        return n <= num;
+    }
 
-    bool operator<=(const float num, const Fraction &f) { return true; }
+    bool operator<=(const float& num, const Fraction &frac) {
+        Fraction temp =Fraction(num);
+        return (temp <= frac);
+    }
 
 // Operator >=
-    bool Fraction::operator>=(const Fraction &other) {
-        int numerator = _numerator * other._denominator;
-        int other_numerator = other._numerator * _denominator;
-        return numerator >= other_numerator;
+    bool Fraction::operator>=(const Fraction &frac) const{
+        int left = _numerator * frac._denominator;
+        int right = _denominator * frac._numerator;
+        return left >= right;
     }
 
-    bool Fraction::operator>=(const float other) { return true; }
+    bool Fraction::operator>=(const float& num) const{
+        float n = (this->_numerator) / (this->_denominator);
+        return n >= num;
+    }
 
-    bool operator>=(const float num, const Fraction &f) { return true; }
+    bool operator>=(const float& num, const Fraction &frac) {
+        Fraction temp =Fraction(num);
+        return (temp >= frac);
+    }
 
 
 // ioStream Operators
@@ -238,15 +264,6 @@ namespace ariel {
         return ist;
     }
 
-//// Conversion operator to convert a float to Fraction object
-//Fraction::operator Fraction(float f) const {
-//    int den = 1000; // maximum of 3 digits after the decimal point
-//    int num = round(f * den);
-//    int gcd_val = gcd(num, den);
-//    num /= gcd_val;
-//    den /= gcd_val;
-//    return Fraction(num, den);
-//}
 //// Conversion operator to convert a Fraction object to float
 //Fraction::operator float() const {
 //    return float(_numerator) / float(_denominator);
