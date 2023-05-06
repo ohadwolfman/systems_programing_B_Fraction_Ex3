@@ -1,3 +1,5 @@
+#!make -f
+
 CXX=clang++-14
 TIDY=clang-tidy-14
 CXXVERSION=c++2a
@@ -14,7 +16,7 @@ OBJECTS=$(subst sources/,objects/,$(subst .cpp,.o,$(SOURCES)))
 run: demo
 	./$^
 
-demo: Demo.o $(OBJECTS) 
+demo: Demo.o $(OBJECTS)
 	$(CXX) $(CXXFLAGS) $^ -o $@
 
 test: TestCounter.o Test.o $(OBJECTS)
