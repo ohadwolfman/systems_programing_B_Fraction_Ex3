@@ -36,6 +36,14 @@ Write a class named Fraction that represents a fraction of two integers. Overloa
 
 </div>
 
+לבסוף נריץ:
+<div dir='ltr'>
+
+	bash grade
+
+</div>
+
+	
 שימו לב:
 אין לשנות קבצים קיימים, אלא רק להוסיף קבצים חדשים.
 מערכת הבדיקה האוטומטית מעתיקה מחדש את כל הקבצים הקיימים על-גבי הפתרון שאתם מגישים,
