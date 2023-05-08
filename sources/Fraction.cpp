@@ -9,9 +9,9 @@ namespace ariel {
 
     Fraction::Fraction(int numerator, int denominator) {
         if (denominator == 0) {
-            throw invalid_argument("You cant select 0 as denominator");
+            throw invalid_argument("You cant choose 0 as denominator");
         }
-        if (_numerator > INT_MAX || _denominator > INT_MAX) {
+        if (((numerator >= INT_MAX) && (denominator<1)) || (numerator/denominator > INT_MAX)) {
             throw overflow_error("Too large number");
         }
         _numerator = numerator;
@@ -41,6 +41,8 @@ namespace ariel {
     }
 
     int Fraction::gcd(int a, int b) {  // https://www.tutorialspoint.com/cplusplus-program-to-find-gcd
+        a = abs(a);
+        b = abs(b);
         if (b == 0)
             return a;
         return gcd(b, a % b);
@@ -55,77 +57,114 @@ namespace ariel {
 
 // Arithmetic Operators
 // Operator +
-    Fraction Fraction::operator+(const Fraction &other) {
-        Fraction f((_numerator * other._denominator) + (_denominator * other._numerator),
-                   _denominator * other._denominator);
+    Fraction Fraction::operator+(const Fraction &frac) {
+        long numerator = long(_numerator * frac._denominator) + long(_denominator * frac._numerator);
+        long denominator = long(_denominator * frac._denominator);
+        if (numerator > INT_MAX || denominator > INT_MAX || numerator < INT_MIN || denominator< INT_MIN) {
+            throw overflow_error("Overflow, Fraction can contain only numbers in the Integer's range ");
+        }
+
+        Fraction f((_numerator * frac._denominator) + (_denominator * frac._numerator),
+                   _denominator * frac._denominator);
         f.reducedForm();
         return f;
     }
 
-    Fraction Fraction::operator+(float& num) {
-        Fraction temp = Fraction(int(num*1000),1000);
+    Fraction Fraction::operator+(const float& num) {
+        Fraction temp =Fraction(num);
         temp = temp + *this;
         return temp.reducedForm();
     }
 
-    Fraction operator+(float& num, const Fraction &frac) {
+    Fraction operator+(const float& num, const Fraction &frac) {
         Fraction temp = Fraction(int(num*1000),1000);
         return (temp + frac).reducedForm();
 
     }
 
 // Operator -
-    Fraction Fraction::operator-(const Fraction &other) {
-        int nn = _numerator * other._denominator - _denominator * other._numerator;
-        int dd = _denominator * other._denominator;
-        return Fraction(nn, dd).reducedForm();
+    Fraction Fraction::operator-(const Fraction &frac) {
+        long longNumerator = long(_numerator * frac._denominator) - long(_denominator * frac._numerator);
+        long longDenominator = long(_denominator * frac._denominator);
+        if (longNumerator > INT_MAX || longDenominator > INT_MAX || longNumerator < INT_MIN || longDenominator< INT_MIN) {
+            throw overflow_error("Overflow, Fraction can contain only numbers in the Integer's range ");
+        }
+
+        int numerator = _numerator * frac._denominator - _denominator * frac._numerator;
+        int denominator = _denominator * frac._denominator;
+        return Fraction(numerator, denominator).reducedForm();
     }
 
-    Fraction Fraction::operator-(float& num) {
-        Fraction temp = Fraction(int(num*1000),1000);
+    Fraction Fraction::operator-(const float& num) {
+        Fraction temp = Fraction(num);
         temp = (*this) - temp;
         return temp.reducedForm();
     }
 
-    Fraction operator-(float& num, const Fraction &frac) {
-        Fraction temp = Fraction(int(num*1000),1000);
+    Fraction operator-(const float& num, const Fraction& frac) {
+        Fraction temp = Fraction(num);
         return (temp - frac).reducedForm();
     }
 
 // Operator *
-    Fraction Fraction::operator*(const Fraction &other) {
-        int numerator = _numerator * other._numerator;
-        int denominator = _denominator * other._denominator;
+    Fraction Fraction::operator*(const Fraction &frac) {
+        if ((_numerator == INT_MIN && frac._numerator == -1) || (_denominator == INT_MIN && frac._denominator == -1)) {
+            throw overflow_error("Overflow, Fraction can contain only numbers in the Integer's range");
+        }
+
+        long longNumerator = long(_numerator * frac._numerator);
+        long longDenominator = long(_denominator * frac._denominator);
+
+        if ((longNumerator > INT_MAX) || (longNumerator < INT_MIN) || (longDenominator > INT_MAX) || (longDenominator < INT_MIN)) {
+            throw overflow_error("Overflow, Fraction can contain only numbers in the Integer's range ");
+        }
+
+        int numerator = _numerator * frac._numerator;
+        int denominator = _denominator * frac._denominator;
         return Fraction(numerator, denominator);
     }
 
-    Fraction Fraction::operator*(const float& other) {
-        Fraction temp = Fraction(int(other*1000),1000);
+    Fraction Fraction::operator*(const float& num) {
+        Fraction temp = Fraction(num);
         temp = temp * (*this);
         return temp.reducedForm();
     }
 
-    Fraction operator*(float& num, const Fraction &f) {
-        Fraction temp = Fraction(int(num*1000),1000);
-        temp = temp * f;
+    Fraction operator*(const float& num, const Fraction& frac) {
+        Fraction temp = Fraction(num);
+        temp = temp * frac;
         return temp.reducedForm();
     }
 
 // Operator /
-    Fraction Fraction::operator/(const Fraction &other) {
-        int numerator = _numerator * other._denominator;
-        int denominator = _denominator * other._numerator;
+    Fraction Fraction::operator/(const Fraction &frac) {
+        if (frac._numerator == 0)
+            throw runtime_error("You can't divide by zero");
+
+        if ((_numerator == INT_MIN && frac._numerator == -1) || frac._numerator == INT_MIN) {
+            throw overflow_error("Overflow, Fraction can contain only numbers in the Integer's range");
+        }
+
+        long longNumerator = long(_numerator * frac._denominator);
+        long longDenominator = long(_denominator * frac._numerator);
+
+        if ((longNumerator > INT_MAX) || (longNumerator < INT_MIN) || (longDenominator > INT_MAX) || (longDenominator < INT_MIN)) {
+            throw overflow_error("Overflow, Fraction can contain only numbers in the Integer's range ");
+        }
+
+        int numerator = _numerator * frac._denominator;
+        int denominator = _denominator * frac._numerator;
         return Fraction(numerator, denominator);
     }
 
     Fraction Fraction::operator/(const float& num) {
-        Fraction temp = Fraction(int(num*1000),1000);
+        Fraction temp = Fraction(num);
         temp = *this/ temp;
         return temp.reducedForm();
     }
 
-    Fraction operator/(float& num, const Fraction &frac) {
-        Fraction temp = Fraction(int(num*1000),1000);
+    Fraction operator/(const float& num, const Fraction &frac) {
+        Fraction temp = Fraction(num);
         return (temp / frac).reducedForm();
     }
 
@@ -165,8 +204,8 @@ namespace ariel {
     }
 
     bool Fraction::operator==(const float& num) const {
-        Fraction n = Fraction(num);
-        return (this->_numerator== n._numerator) && (this->_denominator == n._denominator);
+        Fraction temp = Fraction(num);
+        return (*this) == temp;
     }
 
     bool operator==(const float& num, const Fraction &frac) {
@@ -182,8 +221,8 @@ namespace ariel {
     }
 
     bool Fraction::operator<(const float& num) const{
-        float n = (this->_numerator) / (this->_denominator);
-        return n > num;
+        Fraction temp = Fraction(num);
+        return (*this) < temp;
     }
 
     bool operator<(const float& num, const Fraction &frac){
@@ -199,12 +238,12 @@ namespace ariel {
     }
 
     bool Fraction::operator>(const float& num) const{
-        float n = (this->_numerator) / (this->_denominator);
-        return n > num;
+        Fraction temp = Fraction(num);
+        return (*this) > temp;
     }
 
     bool operator>(const float& num, const Fraction& frac){
-        Fraction temp =Fraction(num);
+        Fraction temp = Fraction(num);
         return (temp > frac);
     }
 
@@ -216,12 +255,12 @@ namespace ariel {
     }
 
     bool Fraction::operator<=(const float& num) const{
-        float n = (this->_numerator) / (this->_denominator);
-        return n <= num;
+        Fraction temp = Fraction(num);
+        return (*this) <= temp;
     }
 
     bool operator<=(const float& num, const Fraction &frac) {
-        Fraction temp =Fraction(num);
+        Fraction temp = Fraction(num);
         return (temp <= frac);
     }
 
@@ -233,8 +272,8 @@ namespace ariel {
     }
 
     bool Fraction::operator>=(const float& num) const{
-        float n = (this->_numerator) / (this->_denominator);
-        return n >= num;
+        Fraction temp = Fraction(num);
+        return (*this) >= temp;
     }
 
     bool operator>=(const float& num, const Fraction &frac) {
@@ -251,24 +290,25 @@ namespace ariel {
     }
 
 // Operator >>
-    istream &operator>>(istream &ist, Fraction &frac) {
-        int numerator, denominator;
-        char slash = '/';
+    istream &operator>>(istream& ist, Fraction& frac) {
+        if(!ist)
+            throw runtime_error("error : invalid input");
 
-        ist >> numerator >> slash >> denominator;
+        int numerator = 0, denominator = 0;
+        ist >> numerator >> denominator;
 
         if (denominator == 0) {
-            throw std::invalid_argument("Denominator cannot be zero");
+            throw runtime_error("Denominator cannot be zero");
         }
+
+        char slash = '/';
+        ist >> numerator >> slash >> denominator;
+
         frac = Fraction(numerator, denominator);
         return ist;
     }
 
-//// Conversion operator to convert a Fraction object to float
-//Fraction::operator float() const {
-//    return float(_numerator) / float(_denominator);
-//}
-//
+
 //// Conversion operator to convert a Fraction object to a string
 //Fraction::operator string() const {
 //    std::ostringstream output;
