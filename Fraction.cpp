@@ -11,7 +11,7 @@ namespace ariel {
         if (denominator == 0) {
             throw invalid_argument("You cant choose 0 as denominator");
         }
-        if (_numerator > INT_MAX || _denominator > INT_MAX) {
+        if (((numerator >= INT_MAX) && (denominator<1)) || (numerator/denominator > INT_MAX)) {
             throw overflow_error("Too large number");
         }
         _numerator = numerator;
@@ -41,6 +41,8 @@ namespace ariel {
     }
 
     int Fraction::gcd(int a, int b) {  // https://www.tutorialspoint.com/cplusplus-program-to-find-gcd
+        a = abs(a);
+        b = abs(b);
         if (b == 0)
             return a;
         return gcd(b, a % b);
@@ -55,9 +57,15 @@ namespace ariel {
 
 // Arithmetic Operators
 // Operator +
-    Fraction Fraction::operator+(const Fraction &other) {
-        Fraction f((_numerator * other._denominator) + (_denominator * other._numerator),
-                   _denominator * other._denominator);
+    Fraction Fraction::operator+(const Fraction &frac) {
+        long numerator = long(_numerator * frac._denominator) + long(_denominator * frac._numerator);
+        long denominator = long(_denominator * frac._denominator);
+        if (numerator > INT_MAX || denominator > INT_MAX || numerator < INT_MIN || denominator< INT_MIN) {
+            throw overflow_error("Overflow, Fraction can contain only numbers in the Integer's range ");
+        }
+
+        Fraction f((_numerator * frac._denominator) + (_denominator * frac._numerator),
+                   _denominator * frac._denominator);
         f.reducedForm();
         return f;
     }
@@ -76,9 +84,15 @@ namespace ariel {
 
 // Operator -
     Fraction Fraction::operator-(const Fraction &frac) {
-        int nn = _numerator * frac._denominator - _denominator * frac._numerator;
-        int dd = _denominator * frac._denominator;
-        return Fraction(nn, dd).reducedForm();
+        long longNumerator = long(_numerator * frac._denominator) - long(_denominator * frac._numerator);
+        long longDenominator = long(_denominator * frac._denominator);
+        if (longNumerator > INT_MAX || longDenominator > INT_MAX || longNumerator < INT_MIN || longDenominator< INT_MIN) {
+            throw overflow_error("Overflow, Fraction can contain only numbers in the Integer's range ");
+        }
+
+        int numerator = _numerator * frac._denominator - _denominator * frac._numerator;
+        int denominator = _denominator * frac._denominator;
+        return Fraction(numerator, denominator).reducedForm();
     }
 
     Fraction Fraction::operator-(const float& num) {
@@ -94,6 +108,17 @@ namespace ariel {
 
 // Operator *
     Fraction Fraction::operator*(const Fraction &frac) {
+        if ((_numerator == INT_MIN && frac._numerator == -1) || (_denominator == INT_MIN && frac._denominator == -1)) {
+            throw overflow_error("Overflow, Fraction can contain only numbers in the Integer's range");
+        }
+
+        long longNumerator = long(_numerator * frac._numerator);
+        long longDenominator = long(_denominator * frac._denominator);
+
+        if ((longNumerator > INT_MAX) || (longNumerator < INT_MIN) || (longDenominator > INT_MAX) || (longDenominator < INT_MIN)) {
+            throw overflow_error("Overflow, Fraction can contain only numbers in the Integer's range ");
+        }
+
         int numerator = _numerator * frac._numerator;
         int denominator = _denominator * frac._denominator;
         return Fraction(numerator, denominator);
@@ -113,6 +138,20 @@ namespace ariel {
 
 // Operator /
     Fraction Fraction::operator/(const Fraction &frac) {
+        if (frac._numerator == 0)
+            throw runtime_error("You can't divide by zero");
+
+        if ((_numerator == INT_MIN && frac._numerator == -1) || frac._numerator == INT_MIN) {
+            throw overflow_error("Overflow, Fraction can contain only numbers in the Integer's range");
+        }
+
+        long longNumerator = long(_numerator * frac._denominator);
+        long longDenominator = long(_denominator * frac._numerator);
+
+        if ((longNumerator > INT_MAX) || (longNumerator < INT_MIN) || (longDenominator > INT_MAX) || (longDenominator < INT_MIN)) {
+            throw overflow_error("Overflow, Fraction can contain only numbers in the Integer's range ");
+        }
+
         int numerator = _numerator * frac._denominator;
         int denominator = _denominator * frac._numerator;
         return Fraction(numerator, denominator);
@@ -261,13 +300,10 @@ namespace ariel {
         if (denominator == 0) {
             throw runtime_error("Denominator cannot be zero");
         }
-        char slash = '/';
 
+        char slash = '/';
         ist >> numerator >> slash >> denominator;
 
-        if (denominator == 0) {
-            throw std::invalid_argument("Denominator cannot be zero");
-        }
         frac = Fraction(numerator, denominator);
         return ist;
     }
