@@ -9,7 +9,7 @@ namespace ariel {
 
     Fraction::Fraction(int numerator, int denominator) {
         if (denominator == 0) {
-            throw invalid_argument("You cant select 0 as denominator");
+            throw invalid_argument("You cant choose 0 as denominator");
         }
         if (_numerator > INT_MAX || _denominator > INT_MAX) {
             throw overflow_error("Too large number");
@@ -68,7 +68,7 @@ namespace ariel {
         return temp.reducedForm();
     }
 
-    Fraction operator+(float& num, const Fraction &frac) {
+    Fraction operator+(const float& num, const Fraction &frac) {
         Fraction temp = Fraction(int(num*1000),1000);
         return (temp + frac).reducedForm();
 
@@ -87,7 +87,7 @@ namespace ariel {
         return temp.reducedForm();
     }
 
-    Fraction operator-(float& num, const Fraction& frac) {
+    Fraction operator-(const float& num, const Fraction& frac) {
         Fraction temp = Fraction(num);
         return (temp - frac).reducedForm();
     }
@@ -124,7 +124,7 @@ namespace ariel {
         return temp.reducedForm();
     }
 
-    Fraction operator/(float& num, const Fraction &frac) {
+    Fraction operator/(const float& num, const Fraction &frac) {
         Fraction temp = Fraction(num);
         return (temp / frac).reducedForm();
     }
@@ -165,8 +165,8 @@ namespace ariel {
     }
 
     bool Fraction::operator==(const float& num) const {
-        Fraction n = Fraction(num);
-        return (this->_numerator== n._numerator) && (this->_denominator == n._denominator);
+        Fraction temp = Fraction(num);
+        return (*this) == temp;
     }
 
     bool operator==(const float& num, const Fraction &frac) {
@@ -182,8 +182,8 @@ namespace ariel {
     }
 
     bool Fraction::operator<(const float& num) const{
-        float n = (this->_numerator) / (this->_denominator);
-        return n > num;
+        Fraction temp = Fraction(num);
+        return (*this) < temp;
     }
 
     bool operator<(const float& num, const Fraction &frac){
@@ -199,12 +199,12 @@ namespace ariel {
     }
 
     bool Fraction::operator>(const float& num) const{
-        float n = (this->_numerator) / (this->_denominator);
-        return n > num;
+        Fraction temp = Fraction(num);
+        return (*this) > temp;
     }
 
     bool operator>(const float& num, const Fraction& frac){
-        Fraction temp =Fraction(num);
+        Fraction temp = Fraction(num);
         return (temp > frac);
     }
 
@@ -216,12 +216,12 @@ namespace ariel {
     }
 
     bool Fraction::operator<=(const float& num) const{
-        float n = (this->_numerator) / (this->_denominator);
-        return n <= num;
+        Fraction temp = Fraction(num);
+        return (*this) <= temp;
     }
 
     bool operator<=(const float& num, const Fraction &frac) {
-        Fraction temp =Fraction(num);
+        Fraction temp = Fraction(num);
         return (temp <= frac);
     }
 
@@ -233,8 +233,8 @@ namespace ariel {
     }
 
     bool Fraction::operator>=(const float& num) const{
-        float n = (this->_numerator) / (this->_denominator);
-        return n >= num;
+        Fraction temp = Fraction(num);
+        return (*this) >= temp;
     }
 
     bool operator>=(const float& num, const Fraction &frac) {
@@ -251,8 +251,16 @@ namespace ariel {
     }
 
 // Operator >>
-    istream &operator>>(istream &ist, Fraction &frac) {
-        int numerator, denominator;
+    istream &operator>>(istream& ist, Fraction& frac) {
+        if(!ist)
+            throw runtime_error("error : invalid input");
+
+        int numerator = 0, denominator = 0;
+        ist >> numerator >> denominator;
+
+        if (denominator == 0) {
+            throw runtime_error("Denominator cannot be zero");
+        }
         char slash = '/';
 
         ist >> numerator >> slash >> denominator;
@@ -264,11 +272,7 @@ namespace ariel {
         return ist;
     }
 
-//// Conversion operator to convert a Fraction object to float
-//Fraction::operator float() const {
-//    return float(_numerator) / float(_denominator);
-//}
-//
+
 //// Conversion operator to convert a Fraction object to a string
 //Fraction::operator string() const {
 //    std::ostringstream output;

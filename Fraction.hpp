@@ -25,7 +25,7 @@ namespace ariel{
         // Operator +
         Fraction operator+(const Fraction& other);
         Fraction operator+(const float& num);
-        friend Fraction operator+(float& num, const Fraction& frac);
+        friend Fraction operator+(const float& num, const Fraction& frac);
 
         // Operator -
         Fraction operator-(const Fraction& other);
@@ -62,7 +62,6 @@ namespace ariel{
         bool operator==(const float& other) const;
         friend bool operator==(const float& num, const Fraction& frac);
 
-
         // Operator <
         bool operator<(const Fraction& frac) const;
         bool operator<(const float& num) const;
@@ -94,7 +93,6 @@ namespace ariel{
         friend istream& operator>>(istream& ist, Fraction& frac);
 
 //        // Conversion Operators
-//        operator float() const;
 //        operator string() const;
     };
 }
