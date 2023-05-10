@@ -17,6 +17,8 @@ namespace ariel{
 
         int getNumerator() const;
         int getDenominator() const;
+        void setNumerator(int numerator);
+        void setDenominator(int denominator);
         int gcd(int first, int second);
         Fraction reducedForm();
 
@@ -91,9 +93,6 @@ namespace ariel{
         friend ostream& operator<<(ostream& ost, const Fraction& frac);
         // Operator >>
         friend istream& operator>>(istream& ist, Fraction& frac);
-
-//        // Conversion Operators
-//        operator string() const;
     };
 }
 #endif

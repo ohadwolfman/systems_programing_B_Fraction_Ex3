@@ -9,10 +9,10 @@ namespace ariel {
 
     Fraction::Fraction(int numerator, int denominator) {
         if (denominator == 0) {
-            throw invalid_argument("You cant choose 0 as denominator");
+            throw invalid_argument("Denominator can't be zero");
         }
-        if (((numerator >= INT_MAX) && (denominator<1)) || (numerator/denominator > INT_MAX)) {
-            throw overflow_error("Too large number");
+        if ((numerator > INT_MAX) || (denominator > INT_MAX ) || (numerator < INT_MIN) || (denominator  < INT_MIN)) {
+            throw overflow_error("The numbers must be in the Integer's range");
         }
         _numerator = numerator;
         _denominator = denominator;
@@ -38,6 +38,14 @@ namespace ariel {
 
     int Fraction::getDenominator() const {
         return this->_denominator;
+    }
+
+    void Fraction::setNumerator(int numerator){
+        this->_numerator = numerator;
+    }
+
+    void Fraction::setDenominator(int denominator){
+        this->_denominator=denominator;
     }
 
     int Fraction::gcd(int a, int b) {  // https://www.tutorialspoint.com/cplusplus-program-to-find-gcd
@@ -108,12 +116,8 @@ namespace ariel {
 
 // Operator *
     Fraction Fraction::operator*(const Fraction &frac) {
-        if ((_numerator == INT_MIN && frac._numerator == -1) || (_denominator == INT_MIN && frac._denominator == -1)) {
-            throw overflow_error("Overflow, Fraction can contain only numbers in the Integer's range");
-        }
-
-        long longNumerator = long(_numerator * frac._numerator);
-        long longDenominator = long(_denominator * frac._denominator);
+        long longNumerator = long(_numerator) * frac._numerator;
+        long longDenominator = long(_denominator) * frac._denominator;
 
         if ((longNumerator > INT_MAX) || (longNumerator < INT_MIN) || (longDenominator > INT_MAX) || (longDenominator < INT_MIN)) {
             throw overflow_error("Overflow, Fraction can contain only numbers in the Integer's range ");
@@ -141,12 +145,8 @@ namespace ariel {
         if (frac._numerator == 0)
             throw runtime_error("You can't divide by zero");
 
-        if ((_numerator == INT_MIN && frac._numerator == -1) || frac._numerator == INT_MIN) {
-            throw overflow_error("Overflow, Fraction can contain only numbers in the Integer's range");
-        }
-
-        long longNumerator = long(_numerator * frac._denominator);
-        long longDenominator = long(_denominator * frac._numerator);
+        long longNumerator = long(_numerator) * frac._denominator;
+        long longDenominator = long(_denominator) * frac._numerator;
 
         if ((longNumerator > INT_MAX) || (longNumerator < INT_MIN) || (longDenominator > INT_MAX) || (longDenominator < INT_MIN)) {
             throw overflow_error("Overflow, Fraction can contain only numbers in the Integer's range ");
@@ -291,29 +291,20 @@ namespace ariel {
 
 // Operator >>
     istream &operator>>(istream& ist, Fraction& frac) {
+        ist >> frac._numerator >> frac._denominator;
         if(!ist)
-            throw runtime_error("error : invalid input");
+            throw runtime_error("Invalid input");
 
-        int numerator = 0, denominator = 0;
-        ist >> numerator >> denominator;
-
-        if (denominator == 0) {
-            throw runtime_error("Denominator cannot be zero");
+        if (frac._denominator < 0) {
+            frac._numerator = -1*frac._numerator;
+            frac._denominator = abs(frac._denominator);
         }
+        if (frac._denominator == 0)
+            throw runtime_error("Denominator can't be zero");
 
-        char slash = '/';
-        ist >> numerator >> slash >> denominator;
+        if (frac._numerator == 0)
+            frac._denominator = 1;
 
-        frac = Fraction(numerator, denominator);
         return ist;
     }
-
-
-//// Conversion operator to convert a Fraction object to a string
-//Fraction::operator string() const {
-//    std::ostringstream output;
-//    output << _numerator << "/" << _denominator;
-//    return output.str();
-////    return to_string(_numerator) + "/" + to_string(_denominator);
-//}
 }
